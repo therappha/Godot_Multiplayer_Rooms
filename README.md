@@ -6,19 +6,19 @@ This is a **simple room manager** designed for **Godot** using **WebSocket**. Th
 
 ## How It Works
 - **WebSocket Communication**: Clients connect to the WebSocket server to get a list of available rooms.
-- **Room List & Ports**: Each room in the `room_list` represents a port where an `ENetworkPeer` server is running.
+- **Room List & Ports**: Each room in the `room_list` represents a port where an `ENetMultiplayerPeer` server is running.
 - **Joining a Room**: 
   - The "Join" button on the client uses `peer.create_client(static_ip, int(port))`, where `port` corresponds to the selected room's ID.
 - **Server Communication**: 
   - The client communicates with the Node.js server only when not in a room.
-  - Once in a room, communication bypasses the Node.js server and goes directly through `ENetworkPeer`. This approach overcomes the 32-player limit of `ENetworkPeer`.
+  - Once in a room, communication bypasses the Node.js server and goes directly through `ENetMultiplayerPeer`. This approach overcomes the 32-player limit of `ENetMultiplayerPeer`.
 
 ---
 
 ## Features
-- **Room Creation**: Clients can request the WebSocket server to create rooms, then the websocket will request server.gd to create a room with Enetworkpeer!.
+- **Room Creation**: Clients can request the WebSocket server to create rooms, then the websocket will request server.gd to create a room with ENetMultiplayerPeer!.
 - **Room Management**: The server manages and shares a list of active rooms with connected clients.
-- **Scalability**: Bypasses the limitations of `ENetworkPeer` for rooms by managing connections at the Node.js level.
+- **Scalability**: Bypasses the limitations of `ENetMultiplayerPeer` for rooms by managing connections at the Node.js level.
 
 ---
 
@@ -63,7 +63,7 @@ This is a **simple room manager** designed for **Godot** using **WebSocket**. Th
 
 ## Notes
 - This project is a work in progress and is not fully functional yet.
-- The primary goal is to bypass the limitations of `ENetworkPeer` for a lobby creation!.
+- The primary goal is to bypass the limitations of `ENetMultiplayerPeer` for a lobby creation!.
 
 ---
 
