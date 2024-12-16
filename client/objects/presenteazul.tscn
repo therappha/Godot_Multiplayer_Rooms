@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://83rexokoqqsk"]
+
+[ext_resource type="Texture2D" uid="uid://d3a02kcac0guq" path="res://textures/sprites/objects/presente azul.png" id="1_3u4sj"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_myda2"]
+radius = 8.0
+height = 16.0
+
+[node name="presenteazul" type="Node2D"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, -6)
+shape = SubResource("CapsuleShape2D_myda2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
+texture = ExtResource("1_3u4sj")

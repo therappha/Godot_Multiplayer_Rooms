@@ -1,0 +1,65 @@
+[gd_scene load_steps=5 format=3 uid="uid://bhv6mhoepijka"]
+
+[ext_resource type="Script" path="res://scenes/network.gd" id="1_6pk75"]
+[ext_resource type="FontFile" uid="uid://r21mjaxhndaf" path="res://fonts/pixel_font.ttf" id="2_cfh8o"]
+[ext_resource type="PackedScene" uid="uid://b3lx38kenqyk0" path="res://scenes/main.tscn" id="3_ik0wb"]
+[ext_resource type="PackedScene" uid="uid://c2dsho5u6gje6" path="res://scenes/player.tscn" id="4_ev3h1"]
+
+[node name="menuscene" type="Node2D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ItemList" type="ItemList" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -239.0
+offset_top = -283.0
+offset_right = 252.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_cfh8o")
+theme_override_font_sizes/font_size = 16
+auto_height = true
+
+[node name="create_room" type="Button" parent="CanvasLayer"]
+offset_left = 36.0
+offset_top = 522.0
+offset_right = 284.0
+offset_bottom = 619.0
+theme_override_fonts/font = ExtResource("2_cfh8o")
+text = "CREATE NEW ROOM"
+
+[node name="join_room" type="Button" parent="CanvasLayer"]
+visible = false
+offset_left = 870.0
+offset_top = 522.0
+offset_right = 1112.0
+offset_bottom = 615.0
+theme_override_fonts/font = ExtResource("2_cfh8o")
+text = "JOIN"
+
+[node name="refresh" type="Button" parent="CanvasLayer"]
+offset_left = 526.0
+offset_top = 276.0
+offset_right = 646.0
+offset_bottom = 353.0
+theme_override_fonts/font = ExtResource("2_cfh8o")
+text = "REFRESH"
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_6pk75")
+packed_main = ExtResource("3_ik0wb")
+packed_player = ExtResource("4_ev3h1")
+
+[connection signal="item_selected" from="CanvasLayer/ItemList" to="CanvasLayer/Control" method="_on_item_list_item_selected"]
+[connection signal="pressed" from="CanvasLayer/create_room" to="CanvasLayer/Control" method="_on_create_room_pressed"]
+[connection signal="pressed" from="CanvasLayer/join_room" to="CanvasLayer/Control" method="_on_join_room_pressed"]
+[connection signal="pressed" from="CanvasLayer/refresh" to="CanvasLayer/Control" method="_on_refresh_pressed"]
