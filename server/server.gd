@@ -2,13 +2,11 @@ extends Node2D
 
 var server : TCPServer
 var port : int = 6000
-var client : StreamPeerTCP = null  # Store the current connected client
+var client : StreamPeerTCP = null
 
+#@ Initializes the server and starts listening on the specified port
 func _ready():
-	# Initialize TCPServer
 	server = TCPServer.new()
-
-	# Start listening on the specified port
 	var result = server.listen(port)
 	if result == OK:
 		print("Godot TCP server started on port ", port)
@@ -16,46 +14,38 @@ func _ready():
 	else:
 		print("Failed to start server on port ", port)
 
-# Called every frame
+#@ Processes incoming connections and handles client communication
 func _process(delta):
-	# Accept new incoming connections if available
 	if server.is_connection_available():
 		client = server.take_connection()
 		if client:
 			print("NODE.JS SERVER CONNECTED")
-	
+
 	if client != null:
 		if client.get_available_bytes() > 0:
-			# Get the data as an Array (instead of PoolByteArray)
-			var data = client.get_data(client.get_available_bytes())  # This now returns an Array of bytes
+			var data = client.get_data(client.get_available_bytes())
 			print("Raw data received:", data)
-			_handle_client_data(data)  # Call a separate function to handle the raw data
+			_handle_client_data(data)
 
-# Function to handle raw data
+#@ Handles raw data received from the client
+#@param data Array of raw bytes received
 func _handle_client_data(data: Array) -> void:
-	# Step 1: Extract the ASCII array (second element in the raw data)
-	var ascii_array = data[1]  # This is the array of ASCII values
-
-	# Step 2: Convert the ASCII values to a string
+	var ascii_array = data[1]
 	var json_string = ""
 	for ascii_value in ascii_array:
-		json_string += String.chr(ascii_value) # Convert each ASCII value to a character
+		json_string += String.chr(ascii_value)
+	var json = JSON.new()
+	var json_data = json.parse(json_string)
 
-	# Step 3: Parse the JSON string
-	var json = JSON.new()  # Create an instance of the JSON class
-	var json_data = json.parse(json_string)  # Parse the JSON string using the instance
-
-# Check if parsing was successful
 	if json_data == OK:
-		var parsed_data = json.get_data()  # Retrieve the parsed data (this is the Dictionary)
-		print("Parsed data: ", parsed_data)  # This will print the parsed JSON object
-		handle_message(parsed_data)  # Pass the parsed data to handle_message
+		var parsed_data = json.get_data()
+		print("Parsed data: ", parsed_data)
+		handle_message(parsed_data)
 	else:
-		print("Failed to parse JSON: ", json_data)  # Output the error code if parsing fails
+		print("Failed to parse JSON: ", json_data)
 
-
-
-# Handle different types of messages
+#@ Handles messages based on their type
+#@param data Dictionary containing the parsed message data
 func handle_message(data: Dictionary) -> void:
 	match data["type"]:
 		"create_room":
@@ -63,24 +53,28 @@ func handle_message(data: Dictionary) -> void:
 		_:
 			print("Unknown message type:", data["type"])
 
-# Handle creating a new room
+#@ Handles the creation of a new room and sends a response
+#@param data Dictionary containing the message data for room creation
 func handle_create_room(data: Dictionary) -> void:
-	var room_id = create_room()  # Call the function to generate a unique room ID
+	var room_id = create_room()
 	print("Created new room with ID:", room_id)
-	var response = { 
-		"type": "room_created", 
-		"success": true, 
-		"message": "Room created successfully!", 
-		"room_id": room_id  # Include the generated room ID in the response
+	var response = {
+		"type": "room_created",
+		"success": true,
+		"message": "Room created successfully!",
+		"room_id": room_id
 	}
 	send_message(response)
 
-# Returns roomport
+#@ Creates a unique room ID
+#@return int A randomly generated room ID
 func create_room() -> int:
-	return (randi_range(49152, 65535))
+	return randi_range(49152, 65535)
 
+#@ Sends a JSON response to the client
+#@param response Dictionary containing the response data
 func send_message(response: Dictionary) -> void:
 	var json_parser = JSON.new()
-	var json_string = json_parser.stringify(response)  # Convert to JSON string
-	client.put_data(json_string.to_utf8_buffer())  # Send the response as UTF-8 encoded data
+	var json_string = json_parser.stringify(response)
+	client.put_data(json_string.to_utf8_buffer())
 	print("Sent response:", json_string)

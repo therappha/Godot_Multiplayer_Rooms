@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="escape from santa server"
+config/name="Multiplayer_Server"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 
