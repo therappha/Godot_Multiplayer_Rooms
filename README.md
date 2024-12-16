@@ -1,6 +1,7 @@
 # Godot Room Manager with WebSocket
 This is a **simple room manager** designed for **Godot** using **WebSocket**. The Node.js server acts as a lobby for players to join and manage rooms.
-⚠️ **Note**: This is not the most optimal solution. but it was what I could do with my current knowledge. Feel free to try it out, modify, and use the code!
+
+-⚠️ **Note**: This is not the most optimal solution. but it was what I could do with my current knowledge. Feel free to try it out, modify, and use the code!
 
 
 ## How It Works
